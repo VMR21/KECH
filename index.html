@@ -1,0 +1,790 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Kechbatron - Exclusive Wager Races</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Kechbatron offers exclusive wager races for Rainbet with amazing prizes!">
+    <meta property="og:image"
+        content="/logo.png">
+    <link rel="icon" type="image/png" href="/assets/logo.png">
+
+    <!-- Modern Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/css/modern.css">
+    <link rel="stylesheet" type="text/css" href="/css/modern-nav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Ultra Modern Video Player */
+        .draggable {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 320px;
+            height: 220px;
+            z-index: 1000;
+            transform: translateY(0);
+            transition: all 0.5s cubic-bezier(0.2, 0, 0.2, 1);
+            animation: player-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes player-enter {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .player-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                0 0 0 3px rgba(29, 161, 242, 0.2);
+            background: rgba(20, 20, 25, 0.85);
+            backdrop-filter: blur(15px);
+            transform: translateZ(0);
+        }
+
+        /* Glass morphism glow effect */
+        .player-container:before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(135deg, rgba(29, 161, 242, 0.2), transparent 80%, rgba(29, 161, 242, 0.1));
+            z-index: -1;
+            border-radius: 18px;
+            filter: blur(10px);
+            opacity: 0.7;
+            animation: glow-pulse 5s infinite alternate ease-in-out;
+        }
+
+        @keyframes glow-pulse {
+            0% {
+                opacity: 0.4;
+                filter: blur(10px);
+            }
+
+            50% {
+                opacity: 0.7;
+                filter: blur(15px);
+            }
+
+            100% {
+                opacity: 0.4;
+                filter: blur(10px);
+            }
+        }
+
+        .draggable.expanded {
+            width: 480px;
+            height: 320px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(5, 5, 10, 0.9) 0%, rgba(5, 5, 10, 0.7) 100%);
+            backdrop-filter: blur(10px);
+            padding: 10px 16px;
+            height: 42px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 2;
+        }
+
+        .draggable:hover .controls {
+            opacity: 1;
+        }
+
+        .control-buttons {
+            display: flex;
+            margin-left: auto;
+            gap: 8px;
+        }
+
+        .drag-handle {
+            flex-grow: 1;
+            text-align: left;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 0 10px;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .live-indicator:before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #ff3e3e;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .size-btn,
+        .close-btn {
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .size-btn:hover,
+        .close-btn:hover {
+            background-color: rgba(29, 161, 242, 0.2);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .size-btn:active,
+        .close-btn:active {
+            transform: translateY(1px);
+        }
+
+        .close-btn:hover {
+            background-color: rgba(255, 59, 59, 0.2);
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .minimized-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #7717FF, #ff9500);
+            color: #fff;
+            font-size: 18px;
+            z-index: 1001;
+            cursor: pointer;
+            box-shadow:
+                0 5px 15px rgba(29, 161, 242, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(0);
+            overflow: hidden;
+        }
+
+        .minimized-icon:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+            z-index: -1;
+            border-radius: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .minimized-icon:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow:
+                0 8px 20px rgba(29, 161, 242, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .minimized-icon:hover:before {
+            opacity: 1;
+        }
+
+        .minimized-icon:active {
+            transform: scale(0.96) translateY(0);
+        }
+
+        .open-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 570px) {
+            .draggable {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                bottom: 20px;
+                width: 85%;
+                max-width: 320px;
+                height: 200px;
+            }
+
+            .draggable.expanded {
+                width: 92%;
+                max-width: 480px;
+                height: 280px;
+            }
+
+            .minimized-icon {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+            }
+
+            .minimized-icon:hover {
+                transform: translateX(-50%) scale(1.08);
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .code-description-container {
+                flex-direction: column;
+            }
+
+            .code-description-card,
+            .code-image {
+                min-width: 100%;
+            }
+
+            .code-image {
+                order: -1;
+                margin-bottom: 20px;
+            }
+        }
+
+        .code-description-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(29, 161, 242, 0.5);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px) scaleX(1) rotate(20deg);
+            }
+
+            50% {
+                transform: translateY(-10px) scaleX(1) rotate(20deg);
+            }
+
+            100% {
+                transform: translateY(0px) scaleX(1) rotate(20deg);
+            }
+        }
+
+        @keyframes floatLeft {
+            0% {
+                transform: translateY(0px) scaleX(-1) rotate(20deg);
+            }
+
+            50% {
+                transform: translateY(-10px) scaleX(-1) rotate(20deg);
+            }
+
+            100% {
+                transform: translateY(0px) scaleX(-1) rotate(20deg);
+            }
+        }
+
+        .coin-container {
+            position: relative;
+            height: 0;
+            margin: 0;
+        }
+
+        .coin-left,
+        .coin-right {
+            position: absolute;
+            height: 100px;
+            width: auto;
+            opacity: 0.7;
+            top: -50px;
+        }
+
+        .coin-left {
+            left: 22%;
+            animation: floatLeft 3s ease-in-out infinite;
+        }
+
+        .coin-right {
+            right: 25%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @media screen and (max-width: 768px) {
+            .coin-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="pattern-bg">
+    <!-- Toast Notification -->
+    <div id="toast" class="toast-modern">
+        <span id="message"></span>
+    </div>
+
+    <!-- Minimized Player Icon -->
+    <div id="minimized-icon" class="minimized-icon" style="display: none;">
+        <button id="open-btn" class="open-btn" title="Open video player"><i class="fas fa-play"></i></button>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo-title">
+                <img src="/assets/logo.png" alt="Site logo" class="logo">
+                <h1 class="title">Kechbatron</h1>
+            </div>
+        </nav>
+    </header>
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section fade-in">
+            <div class="hero-content">
+                <h1 class="hero-title">Exclusive Wager Races</h1>
+                <p class="hero-subtitle">Join the most exciting wager competitions with amazing prizes and rewards!</p>
+
+                <!-- Featured Race Card -->
+                <div class="featured-race card glass" style="max-width: 600px; margin: 2rem auto; overflow: visible;">
+                    <img src="/assets/rainbet.png" alt="Rainbet"
+                        style="height: 80px; width: auto; object-fit: contain; margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem;">Rainbet Wager Race</h2>
+                    <div class="prize-pool" style="margin-bottom: 2rem;">
+                        <span style="font-size: 1.2rem; color: var(--text-secondary);">Prize Pool</span>
+                        <h3 class="text-glow" style="font-size: 3rem; color: var(--success-color); margin: 0.5rem 0;">
+                            $400</h3>
+                    </div>
+                    <a href="/leaderboard/rainbet" class="btn btn-primary" style="position: relative; z-index: 100;">
+                        <i class="fas fa-trophy"></i>
+                        View Leaderboard
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- Features Section -->
+        <section style="padding: 4rem 2rem;">
+            <div class="features-grid slide-up">
+                <!-- Rainbet Card -->
+                <div class="feature-card">
+                    <div style="margin-bottom: 2rem;">
+                        <img src="/assets/rainbet.png" alt="Rainbet" style="height: 60px;">
+                    </div>
+                    <h3 class="feature-title">Join Rainbet</h3>
+                    <div style="margin: 2rem 0;">
+                        <div
+                            style="background: var(--gradient-primary); padding: 1rem; border-radius: 12px; margin-bottom: 1rem;">
+                            <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Use Code</p>
+                            <p style="font-size: 2rem; font-weight: 800; letter-spacing: 2px;">KECH</p>
+                        </div>
+                    </div>
+                    <div style="text-align: left; margin-bottom: 2rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                            <span>Exclusive Leaderboard Access</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                            <span>VIP Rewards & Benefits</span>
+                        </div>
+                    </div>
+                    <a href="https://rainbet.com/?r=KECH" target="_blank" class="btn btn-primary" style="width: 100%;">
+                        Sign Up Now
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- How It Works Card -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-dice"></i>
+                    </div>
+                    <h3 class="feature-title">How It Works</h3>
+                    <div style="text-align: left;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4 style="color: var(--accent-color); margin-bottom: 0.5rem;">1. Sign Up</h4>
+                            <p class="feature-description">Create your account using code KECH</p>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4 style="color: var(--accent-color); margin-bottom: 0.5rem;">2. Place Wagers</h4>
+                            <p class="feature-description">Every bet counts towards your leaderboard score</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-color); margin-bottom: 0.5rem;">3. Win Prizes</h4>
+                            <p class="feature-description">Compete for your share of the prize pool</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prize Info Card -->
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: var(--gradient-secondary);">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="feature-title">Weekly Prizes</h3>
+                    <div style="margin: 2rem 0;">
+                        <h2 style="font-size: 2.5rem; color: var(--success-color); margin-bottom: 0.5rem;">$1,500</h2>
+                        <p class="feature-description">Total Prize Pool</p>
+                    </div>
+                    <p class="feature-description" style="margin-bottom: 2rem;">Top players win cash prizes every week.
+                        Check the leaderboard to see your ranking!</p>
+                    <a href="/leaderboard/rainbet" class="btn btn-secondary" style="width: 100%;">
+                        View Rankings
+                        <i class="fas fa-chart-line"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- Social Section -->
+        <section id="socials" class="social-section">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Connect With Me</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Follow for updates, giveaways, and exclusive
+                content!</p>
+
+            <div class="social-grid">
+                <a href="https://kick.com/Kechbatron" target="_blank" class="social-card">
+                    <img src="/assets/kick.png" alt="Kick" style="width: 24px; height: 24px;">
+                    <span style="font-weight: 600;">@Kechbatron</span>
+                </a>
+                <a href="https://discord.gg/6BgcWpJxvk" target="_blank" class="social-card">
+                    <img src="/assets/discord.png" alt="Kick" style="width: 24px; height: 24px;">
+                    <span style="font-weight: 600;">@Kechbatron</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Videos Section -->
+        <section style="padding: 4rem 2rem;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h2 style="font-size: 2.5rem; text-align: center; margin-bottom: 3rem;">Latest Videos</h2>
+                <div class="videos-carousel-container" style="position: relative;">
+                    <button id="prev-video" class="video-nav-btn prev-btn"
+                        style="position: absolute; left: -50px; top: 50%; transform: translateY(-50%); background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; z-index: 10;">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="cards-container-videos"
+                        style="display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; padding: 1rem 0;">
+                        <a href="https://www.youtube.com/shorts/WUYk172_G_A" target="_blank" class="card-link-videos">
+                <div class="card-videos">
+                    <div class="card-logo-videos">
+                        <img src="https://i4.ytimg.com/vi/WUYk172_G_A/hqdefault.jpg" alt="He predicted the script... #slot #slotscasinogames #bigwin #maxwinslotonline #casino">
+                    </div>
+                    <div class="card-content-videos">
+                        <h2>He predicted the script... #slot #slotscasinogames #bigwin #maxwinslotonline #casino</h2>
+                    </div>
+                </div>
+            </a><a href="https://www.youtube.com/shorts/X2H6yOmfHms" target="_blank" class="card-link-videos">
+                <div class="card-videos">
+                    <div class="card-logo-videos">
+                        <img src="https://i1.ytimg.com/vi/X2H6yOmfHms/hqdefault.jpg" alt="450X ON WITCH HEARTS!!! #slot #slotscasinogames #bigwin #maxwinslotonline #casino">
+                    </div>
+                    <div class="card-content-videos">
+                        <h2>450X ON WITCH HEARTS!!! #slot #slotscasinogames #bigwin #maxwinslotonline #casino</h2>
+                    </div>
+                </div>
+            </a><a href="https://www.youtube.com/shorts/iUPVVL2LLGo" target="_blank" class="card-link-videos">
+                <div class="card-videos">
+                    <div class="card-logo-videos">
+                        <img src="https://i2.ytimg.com/vi/iUPVVL2LLGo/hqdefault.jpg" alt="1400X WIN ON FIGHTER PIT!!! #slot #slotscasinogames #bigwin #maxwinslotonline #casino">
+                    </div>
+                    <div class="card-content-videos">
+                        <h2>1400X WIN ON FIGHTER PIT!!! #slot #slotscasinogames #bigwin #maxwinslotonline #casino</h2>
+                    </div>
+                </div>
+            </a><a href="https://www.youtube.com/shorts/yx0OBniJU2M" target="_blank" class="card-link-videos">
+                <div class="card-videos">
+                    <div class="card-logo-videos">
+                        <img src="https://i2.ytimg.com/vi/yx0OBniJU2M/hqdefault.jpg" alt="500X ON ATHENA!!! #slot #slotscasinogames #bigwin #maxwinslotonline #casino">
+                    </div>
+                    <div class="card-content-videos">
+                        <h2>500X ON ATHENA!!! #slot #slotscasinogames #bigwin #maxwinslotonline #casino</h2>
+                    </div>
+                </div>
+            </a><a href="https://www.youtube.com/shorts/6x5_EssPsWI" target="_blank" class="card-link-videos">
+                <div class="card-videos">
+                    <div class="card-logo-videos">
+                        <img src="https://i3.ytimg.com/vi/6x5_EssPsWI/hqdefault.jpg" alt="300X TUMBLE ON GATES!!! #slot #slotscasinogames #bigwin #maxwinslotonline #casino">
+                    </div>
+                    <div class="card-content-videos">
+                        <h2>300X TUMBLE ON GATES!!! #slot #slotscasinogames #bigwin #maxwinslotonline #casino</h2>
+                    </div>
+                </div>
+            </a>
+                    </div>
+                    <button id="next-video" class="video-nav-btn next-btn"
+                        style="position: absolute; right: -50px; top: 50%; transform: translateY(-50%); background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; z-index: 10;">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modern Footer -->
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <img src="/assets/logo.png" alt="Kechbatron" style="width: 40px; height: 40px; border-radius: 8px;">
+                    <h3 style="font-size: 1.5rem; margin: 0;">Kechbatron</h3>
+                </div>
+                <p style="color: var(--text-secondary);">Your destination for exclusive wager races and competitions.
+                </p>
+                <p style="color: var(--text-secondary); margin-top: 1rem;">© 2025 Kechbatron All rights reserved.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/leaderboard">Leaderboards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <ul class="footer-links">
+                    <li>
+                        <a href="https://kick.com/Kechbatron" target="_blank">
+                            <img src="/assets/kick.png"
+                                style="width: 16px; height: 16px; vertical-align: middle; margin-right: 8px;">
+                            Kick - @Kechbatron
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://discord.gg/6BgcWpJxvk" target="_blank">
+                            <img src="/assets/discord.png"
+                                style="width: 16px; height: 16px; vertical-align: middle; margin-right: 8px;">
+                            Discord - @Kechbatron
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Responsible Gaming</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                    <strong>BeGambleAware.com</strong><br>
+                    Gambling can be addictive. Please play responsibly. Set limits and seek help if needed.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <!-- Floating Player (Hidden by Default) -->
+    <div id="draggable-player" class="draggable" style="display: none;">
+        <div class="player-container">
+            <div class="controls">
+                <div class="drag-handle" id="drag-handle">
+                    <span class="live-indicator">LIVE</span>
+                    <span>Stream</span>
+                </div>
+                <div class="control-buttons">
+                    <button class="size-btn" id="expand-btn" title="Expand player">
+                        <i class="fas fa-expand-alt"></i>
+                    </button>
+                    <button class="close-btn" id="close-btn" title="Close player">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <iframe src="" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"95981287ac1347d2","version":"2025.6.2","r":1,"token":"4b89304ec6934893b4c992ebc5f5c04c","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}}}' crossorigin="anonymous"></script>
+</body>
+
+<!-- Scripts -->
+<script src="/js/app.js"></script>
+<script src="/js/toast.js"></script>
+
+<script>
+    window.onload = function () {
+        // Video player functionality
+        var player = document.getElementById('draggable-player');
+        var dragHandle = document.getElementById('drag-handle');
+        var closeBtn = document.getElementById('close-btn');
+        var expandBtn = document.getElementById('expand-btn');
+        var minimizedIcon = document.getElementById('minimized-icon');
+        var openBtn = document.getElementById('open-btn');
+        var isExpanded = false;
+
+        // Hide the player and show the minimized icon when close button is clicked
+        closeBtn.onclick = function () {
+            player.style.display = 'none';
+            minimizedIcon.style.display = 'flex';
+
+            // Add a nice entry animation
+            minimizedIcon.style.transform = 'translateY(20px) scale(0.9)';
+            minimizedIcon.style.opacity = '0';
+
+            // Use setTimeout to ensure the style change is registered before animation
+            setTimeout(function () {
+                if (window.innerWidth <= 570) {
+                    minimizedIcon.style.transform = 'translateX(-50%) scale(1)';
+                } else {
+                    minimizedIcon.style.transform = 'translateY(0) scale(1)';
+                }
+                minimizedIcon.style.opacity = '1';
+            }, 10);
+        };
+
+        // Add click event to the minimized icon to show the player again
+        openBtn.onclick = function () {
+            minimizedIcon.style.display = 'none';
+            player.style.display = 'block';
+
+            // Reset animation to create entry effect again
+            player.style.animation = 'none';
+            player.offsetHeight; // Force reflow
+            player.style.animation = 'player-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+        };
+
+        // Toggle expanded state when expand button is clicked
+        expandBtn.onclick = function () {
+            isExpanded = !isExpanded;
+
+            if (isExpanded) {
+                player.classList.add('expanded');
+                expandBtn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+                expandBtn.title = "Shrink player";
+            } else {
+                player.classList.remove('expanded');
+                expandBtn.innerHTML = '<i class="fas fa-expand-alt"></i>';
+                expandBtn.title = "Expand player";
+            }
+        };
+
+        // Video carousel functionality
+        var videosContainer = document.querySelector('.cards-container-videos');
+        var prevBtn = document.getElementById('prev-video');
+        var nextBtn = document.getElementById('next-video');
+
+        if (videosContainer && prevBtn && nextBtn) {
+            // Calculate scroll distance based on card width + gap
+            var scrollAmount = 260; // Average card width (240px) + gap (20px)
+
+            prevBtn.addEventListener('click', function () {
+                videosContainer.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+
+            nextBtn.addEventListener('click', function () {
+                videosContainer.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Show/hide arrows based on scroll position
+            function updateArrowVisibility() {
+                if (videosContainer.scrollLeft <= 10) {
+                    prevBtn.style.opacity = "0.5";
+                } else {
+                    prevBtn.style.opacity = "1";
+                }
+
+                if (videosContainer.scrollLeft + videosContainer.clientWidth >= videosContainer.scrollWidth - 10) {
+                    nextBtn.style.opacity = "0.5";
+                } else {
+                    nextBtn.style.opacity = "1";
+                }
+            }
+
+            // Listen for scroll events to update arrow visibility
+            videosContainer.addEventListener('scroll', updateArrowVisibility);
+
+            // Initial check
+            updateArrowVisibility();
+
+            // Update on window resize
+            window.addEventListener('resize', updateArrowVisibility);
+        }
+    };
+</script>
