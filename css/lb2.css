@@ -1,0 +1,74 @@
+/* Styling for place indicators as badges */
+.place-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin-right: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  font-size: 16px;
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  z-index: 10;
+}
+
+/* First place badge - Gold */
+.place-indicator.first {
+  background: linear-gradient(135deg, #ffd700, #ffa500);
+  color: #000;
+  border-color: #ffd700;
+}
+
+/* Second place badge - Silver */
+.place-indicator.second {
+  background: linear-gradient(135deg, #c0c0c0, #a9a9a9);
+  color: #000;
+  border-color: #c0c0c0;
+}
+
+/* Third place badge - Bronze */
+.place-indicator.third {
+  background: linear-gradient(135deg, #cd7f32, #a0522d);
+  color: #000;
+  border-color: #cd7f32;
+}
+
+/* Animation for the top 3 badges */
+.place-indicator.first,
+.place-indicator.second,
+.place-indicator.third {
+  animation: badge-pulse 2s infinite;
+}
+
+@keyframes badge-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* For mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .place-indicator {
+    padding: 3px 6px;
+    font-size: 14px;
+  }
+}
