@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Kechbatron | Rainbet Leaderboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Exclusive wager races on Rainbet for code 'KECH'!">
+    <meta property="og:image" content="/assets/logo.png">
+    <link rel="icon" type="image/png" href="/assets/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/css/lb.css">
+    <link rel="stylesheet" type="text/css" href="/css/lb2.css">
+    <link rel="stylesheet" type="text/css" href="/css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/css/modern.css">
+    <link rel="stylesheet" type="text/css" href="/css/modern-nav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/toast.css">
+    <link rel="stylesheet" type="text/css" href="/css/floating-images.css">
+    <script src="/js/countdown-rainbet.js"></script>
+    <style>
+        .warning-message {
+            width: 90%;
+            max-width: 500px;
+            margin: 10px auto;
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff4444;
+            border-radius: 4px;
+            padding: 15px;
+            color: #ff4444;
+            font-weight: bold;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        @media screen and (max-width: 768px) {
+            .warning-message {
+                width: 95%;
+                padding: 12px;
+                font-size: 14px;
+                margin: 10px auto;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(17, 24, 39, 0.95));
+            margin: 10% auto;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: translateY(-20px);
+            transition: transform 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('/assets/rainbet-logo.png');
+            background-size: 40%;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.07;
+            filter: blur(5px);
+            z-index: -1;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        .modal-body {
+            color: #d1d5db;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .modal-body li {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .modal-body ul {
+            padding-left: 20px;
+        }
+
+        .prev-lb-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgb(29, 161, 242);
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(29, 161, 242, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prev-lb-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            background: rgb(29, 161, 242);
+            box-shadow: 0 6px 20px rgba(29, 161, 242, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            color: black;
+        }
+
+        .prev-lb-btn:hover svg {
+            transform: scale(1.1);
+            stroke: black;
+        }
+
+        .prev-lb-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .prev-lb-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px) scaleX(1) rotate(20deg);
+            }
+
+            50% {
+                transform: translateY(-10px) scaleX(1) rotate(20deg);
+            }
+
+            100% {
+                transform: translateY(0px) scaleX(1) rotate(20deg);
+            }
+        }
+
+        @keyframes floatLeft {
+            0% {
+                transform: translateY(0px) scaleX(-1) rotate(20deg);
+            }
+
+            50% {
+                transform: translateY(-10px) scaleX(-1) rotate(20deg);
+            }
+
+            100% {
+                transform: translateY(0px) scaleX(-1) rotate(20deg);
+            }
+        }
+
+        .coin-container {
+            position: relative;
+            height: 0;
+            margin: 0;
+        }
+
+        .coin-left,
+        .coin-right {
+            position: absolute;
+            height: 100px;
+            width: auto;
+            opacity: 0.7;
+            top: -50px;
+        }
+
+        .coin-left {
+            left: 22%;
+            animation: floatLeft 3s ease-in-out infinite;
+        }
+
+        .coin-right {
+            right: 25%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @media screen and (max-width: 768px) {
+            .coin-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="pattern-bg">
+    <div id="toast" class="toast-modern">
+        <span id="message"></span>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo-title">
+                <img src="/assets/logo.png" alt="Site logo" class="logo">
+                <h1 class="title">Kechbatron</h1>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="hero-section fade-in" style="padding: 3rem 2rem;">
+            <div class="hero-content">
+                <img src="/assets/rainbet.png" alt="Rainbet" style="height: 100px; margin-bottom: 2rem;"
+                    class="slide-up">
+
+                <h1 class="hero-title" style="font-size: 3rem; margin-bottom: 1rem;">Kechbatron Leaderboard</h1>
+                <div class="prize-display card glass"
+                    style="display: inline-block; padding: 1.5rem 3rem; margin-bottom: 2rem;">
+                    <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Total Prize Pool
+                    </p>
+                    <h2 class="text-glow" style="font-size: 3.5rem; color: var(--success-color); margin: 0;">$1,500</h2>
+                </div>
+
+                <div
+                    style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin: 3rem auto; max-width: 1100px;">
+                    <div class="info-card"
+                        style="background: rgba(26, 26, 36, 0.8); border: 1px solid rgba(29, 161, 242, 0.2); border-radius: 16px; padding: 2rem; text-align: center; flex: 1; min-width: 280px; max-width: 320px; transition: all 0.3s ease;">
+                        <div
+                            style="width: 60px; height: 60px; background: rgba(29, 161, 242, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                            <i class="fas fa-dice" style="font-size: 1.8rem; color: #1da1f2;"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem; color: #fff;">How It Works</h3>
+                        <p style="color: #a0a0b0; line-height: 1.6;">Every bet on Rainbet under code <strong
+                                style="color: #1da1f2;">KECH</strong> counts towards your score</p>
+                    </div>
+
+                    <div class="info-card"
+                        style="background: rgba(26, 26, 36, 0.8); border: 1px solid rgba(29, 161, 242, 0.2); border-radius: 16px; padding: 2rem; text-align: center; flex: 1; min-width: 280px; max-width: 320px; transition: all 0.3s ease;">
+                        <div
+                            style="width: 60px; height: 60px; background: rgba(29, 161, 242, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                            <i class="fas fa-clock" style="font-size: 1.8rem; color: #1da1f2;"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem; color: #fff;">Live Updates</h3>
+                        <p style="color: #a0a0b0; line-height: 1.6;">Leaderboard refreshes every 15 minutes</p>
+                        <p style="color: #a0a0b0; margin-top: 0.75rem; font-size: 0.9rem;">Last Updated: <strong
+                                id="last-updated-time" style="color: #1da1f2;">Loading...</strong></p>
+                    </div>
+
+                </div>
+
+                <style>
+                    .info-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                    }
+
+                    @media (max-width: 768px) {
+                        .info-card {
+                            min-width: 100% !important;
+                            max-width: 100% !important;
+                        }
+                    }
+                </style>
+
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                    <a href="/prev-leaderboard/rainbet" class="btn btn-secondary">
+                        <i class="fas fa-history"></i>
+                        Previous Leaderboard
+                    </a>
+                    <a href="https://rainbet.com/?r=KECH" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        Join Now
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding: 2rem;">
+            <div class="css-esk2ah">
+                <div class="css-2w2ovy">
+                    <div class="css-gqrafh" id="top-3-leaderboard">
+                    </div>
+                    <div data-v-1d580398="" class="countdown">
+                        <div data-v-1d580398=""><span data-v-1d580398="" class="title"><span style="color: #FFF"
+                                        class="glow">ENDING</span> IN </span><span data-v-1d580398="" class="subtitle"
+                                id=countdown>X Days XX:XX:XX</span></div>
+                    </div>
+                </div>
+                <div data-v-1d580398="" class="row list details">
+                    <div data-v-1d580398="" class="hide-mobile col-2"> Place </div>
+                    <div data-v-1d580398="" class="col-5"> User </div>
+                    <div data-v-1d580398="" class="col-2"> Reward </div>
+                    <div data-v-1d580398="" class="col-3"> Wagered </div>
+                </div>
+                <div id="leaderboard-list">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <img src="/assets/logo.png" alt="Kechbatron" style="width: 40px; height: 40px; border-radius: 8px;">
+                    <h3 style="font-size: 1.5rem; margin: 0;">Kechbatron</h3>
+                </div>
+                <p style="color: var(--text-secondary);">Your destination for exclusive wager races and competitions.
+                </p>
+                <p style="color: var(--text-secondary); margin-top: 1rem;">© 2025 Kechbatron All rights reserved.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/leaderboard">Leaderboards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <ul class="footer-links">
+                    <li>
+                        <a href="https://kick.com/Kechbatron" target="_blank">
+                            <img src="/assets/kick.png"
+                                style="width: 16px; height: 16px; vertical-align: middle; margin-right: 8px;">
+                            Kick - @Kechbatron
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://discord.gg/6BgcWpJxvk" target="_blank">
+                            <img src="/assets/discord.png"
+                                style="width: 16px; height: 16px; vertical-align: middle; margin-right: 8px;">
+                            Discord - @Kechbatron
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Responsible Gaming</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                    <strong>BeGambleAware.com</strong><br>
+                    Gambling can be addictive. Please play responsibly. Set limits and seek help if needed.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+        integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+        data-cf-beacon='{"rayId":"9598282f1afc205b","version":"2025.6.2","r":1,"token":"4b89304ec6934893b4c992ebc5f5c04c","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}}}'
+        crossorigin="anonymous"></script>
+</body>
+
+<script src="/js/app.js"></script>
+<script src="/js/toast.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const leaderboardApiUrl = 'https://kechdata.onrender.com/leaderboard/top14';
+        const top3Leaderboard = document.getElementById('top-3-leaderboard');
+        const leaderboardList = document.getElementById('leaderboard-list');
+        const lastUpdatedTimeElement = document.getElementById('last-updated-time');
+
+        // Define your prizes here for each rank
+        const fixedPrizes = {
+            1: 500,  // 1st place
+            2: 300,  // 2nd place
+            3: 200,  // 3rd place
+            4: 100,  // 4th place (example: increased from 50)
+            5: 75,   // 5th place (example: new prize)
+            6: 50,   // 6th place
+            7: 40,   // 7th place
+            8: 30,   // 8th place
+            9: 20,   // 9th place
+            10: 10   // 10th place
+            // You can add more ranks here if your leaderboard goes beyond 10 positions
+            // e.g., 11: 5, 12: 5, etc.
+        };
+
+        // Function to format numbers with commas
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
+
+        // Function to update the last updated time
+        function updateLastUpdatedTime() {
+            const now = new Date();
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZoneName: 'short' };
+            const formattedTime = now.toLocaleString('en-GB', options).replace(',', '');
+            lastUpdatedTimeElement.textContent = formattedTime.replace('GMT', 'UTC'); // Adjusting to UTC display
+        }
+
+        async function fetchLeaderboardData() {
+            try {
+                const response = await fetch(leaderboardApiUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log("Fetched data:", data); // For debugging
+
+                // Sort data by weightedWager in descending order
+                data.sort((a, b) => b.weightedWager - a.weightedWager);
+
+                // Clear existing leaderboard content
+                top3Leaderboard.innerHTML = '';
+                leaderboardList.innerHTML = '';
+
+                // Populate top 3
+                for (let i = 0; i < Math.min(3, data.length); i++) {
+                    const player = data[i];
+                    const rank = i + 1;
+                    // Get prize from the fixedPrizes object
+                    const prize = fixedPrizes[rank] ? `$ ${fixedPrizes[rank]}` : '';
+
+                    const topPlayerHtml = `
+                        <div class="css-${i === 0 ? 'oijls1' : 'jehefp'}">
+                            <img alt="${player.username}'s avatar" srcset="/assets/rainbet-small.webp" src="/assets/rainbet-small.webp" width="96" height="96" decoding="async" data-nimg="1" class="css-1wgwpc8" loading="lazy" style="color: transparent;">
+                            <div class="css-hca0vm"><span class="css-15a1lq3">${player.username}</span></div>
+                            <div class="css-7ahevu ejrykqo0">
+                                <span class="css-1vqddgv">Wagered: </span>
+                                <span class="css-18icuxn">
+                                    <div class="css-1y0ox2o">
+                                        <span class="css-114dvlx">${formatNumber(player.wagered)}</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <span class="css-v4675v">
+                                <div class="css-1y0ox2o">
+                                    <span class="css-114dvlx">
+                                        <div data-v-1d580398="" class="price-wrapper">
+                                            ${prize}
+                                        </div>
+                                    </span>
+                                </div>
+                            </span>
+                        </div>
+                    `;
+                    top3Leaderboard.innerHTML += topPlayerHtml;
+                }
+
+                // Populate the rest of the leaderboard list (from rank 4 onwards)
+                for (let i = 3; i < data.length; i++) {
+                    const player = data[i];
+                    const rank = i + 1;
+                    let reward = '';
+
+                    // Get prize from the fixedPrizes object for all remaining ranks
+                    if (fixedPrizes[rank]) {
+                        reward = `$ ${fixedPrizes[rank]}`;
+                    } else {
+                        // If no prize is defined for this rank, display 'N/A' or nothing
+                        reward = 'N/A';
+                    }
+
+                    const listItemHtml = `
+                        <div data-v-1d580398="" class="row list row-cols-5">
+                            <div data-v-1d580398="" class="hide-mobile col-2"><b data-v-1d580398="">#</b>${rank}</div>
+                            <div data-v-1d580398="" class="col-5"><img data-v-1d580398="" src="/assets/rainbet-small.webp"><span data-v-1d580398="">${player.username}</span></div>
+                            <div data-v-1d580398="" class="col-2">
+                                <div data-v-1d580398="" class="price-wrapper">
+                                    ${reward}
+                                </div>
+                            </div>
+                            <div data-v-1d580398="" class="col-3">
+                                <div data-v-1d580398="" class="price-wrapper" style="color: #FFF">
+                                    <div class="price-image-wrapper" style="height: 0rem; width: 0rem; margin-right: 0px;"></div>${formatNumber(player.wagered)}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    leaderboardList.innerHTML += listItemHtml;
+                }
+
+                updateLastUpdatedTime(); // Update the timestamp after data is fetched and rendered
+
+            } catch (error) {
+                console.error('Failed to fetch leaderboard data:', error);
+                leaderboardList.innerHTML = `<p style="color: red; text-align: center;">Failed to load leaderboard data. Please try again later.</p>`;
+                top3Leaderboard.innerHTML = `<p style="color: red; text-align: center;">Failed to load top players.</p>`;
+                lastUpdatedTimeElement.textContent = "Error loading time";
+            }
+        }
+
+        // Fetch data initially
+        fetchLeaderboardData();
+
+        // Refresh data every 15 minutes (900000 milliseconds)
+        setInterval(fetchLeaderboardData, 900000);
+    });
+</script>
+
+</html>
