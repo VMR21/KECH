@@ -1,0 +1,151 @@
+/* Modern Navigation Fix */
+
+/* Override modern header styles */
+.modern-header {
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom: none;
+    position: relative;
+    padding: 0;
+    z-index: 100;
+}
+
+/* Use original header styles */
+header {
+    padding: 1.5rem 3rem;
+    position: relative;
+    z-index: 100;
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.logo-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1da1f2 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    list-style: none;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 1rem;
+}
+
+.nav-links a:hover {
+    color: #1da1f2;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: #1da1f2;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 80%;
+}
+
+/* Remove conflicting styles */
+.header-container,
+.logo-section,
+.site-title,
+.nav-menu,
+.nav-link {
+    all: unset;
+}
+
+/* Fix button clickability */
+.btn {
+    pointer-events: auto !important;
+}
+
+.card::before {
+    pointer-events: none !important;
+}
+
+.featured-race {
+    z-index: 1;
+}
+
+.featured-race a {
+    display: inline-flex !important;
+    pointer-events: auto !important;
+    z-index: 100 !important;
+    position: relative !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .logo-title {
+        gap: 0.5rem;
+    }
+    
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .title {
+        font-size: 1.5rem;
+    }
+    
+    .nav-links {
+        gap: 1rem;
+    }
+    
+    .nav-links a {
+        font-size: 0.9rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
