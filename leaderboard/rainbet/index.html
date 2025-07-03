@@ -331,7 +331,7 @@
             <div class="css-esk2ah">
                 <div class="css-2w2ovy">
                     <div class="css-gqrafh" id="top-3-leaderboard">
-                    </div>
+                        </div>
                     <div data-v-1d580398="" class="countdown">
                         <div data-v-1d580398=""><span data-v-1d580398="" class="title"><span style="color: #FFF"
                                         class="glow">ENDING</span> IN </span><span data-v-1d580398="" class="subtitle"
@@ -409,7 +409,7 @@
 <script src="/js/toast.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const leaderboardApiUrl = 'https://kechdata.onrender.com/leaderboard/top14';
+        const leaderboardApiUrl = 'https://nukelbdata.onrender.com/leaderboard/top14';
         const top3Leaderboard = document.getElementById('top-3-leaderboard');
         const leaderboardList = document.getElementById('leaderboard-list');
         const lastUpdatedTimeElement = document.getElementById('last-updated-time');
@@ -459,38 +459,89 @@
                 top3Leaderboard.innerHTML = '';
                 leaderboardList.innerHTML = '';
 
-                // Populate top 3
-                for (let i = 0; i < Math.min(3, data.length); i++) {
-                    const player = data[i];
-                    const rank = i + 1;
-                    // Get prize from the fixedPrizes object
-                    const prize = fixedPrizes[rank] ? `$ ${fixedPrizes[rank]}` : '';
+                // Handle Top 3 Display (2nd, 1st, 3rd)
+                const topPlayers = data.slice(0, 3); // Get the top 3 players
+                if (topPlayers.length > 0) {
+                    const player1 = topPlayers[0];
+                    const player2 = topPlayers[1];
+                    const player3 = topPlayers[2];
 
-                    const topPlayerHtml = `
-                        <div class="css-${i === 0 ? 'oijls1' : 'jehefp'}">
-                            <img alt="${player.username}'s avatar" srcset="/assets/rainbet-small.webp" src="/assets/rainbet-small.webp" width="96" height="96" decoding="async" data-nimg="1" class="css-1wgwpc8" loading="lazy" style="color: transparent;">
-                            <div class="css-hca0vm"><span class="css-15a1lq3">${player.username}</span></div>
-                            <div class="css-7ahevu ejrykqo0">
-                                <span class="css-1vqddgv">Wagered: </span>
-                                <span class="css-18icuxn">
+                    let top3Html = '';
+
+                    // Add 2nd place (if available)
+                    if (player2) {
+                        const prize = fixedPrizes[2] ? `$ ${fixedPrizes[2]}` : '';
+                        top3Html += `
+                            <div class="css-jehefp">
+                                <img alt="${player2.username}'s avatar" srcset="/assets/rainbet-small.webp" src="/assets/rainbet-small.webp" width="96" height="96" decoding="async" data-nimg="1" class="css-1wgwpc8" loading="lazy" style="color: transparent;">
+                                <div class="css-hca0vm"><span class="css-15a1lq3">${player2.username}</span></div>
+                                <div class="css-7ahevu ejrykqo0"><span class="css-1vqddgv">Wagered: </span><span class="css-18icuxn">
+                                        <div class="css-1y0ox2o">
+                                            <span class="css-114dvlx">${formatNumber(player2.wagered)}</span>
+                                        </div>
+                                    </span></div><span class="css-v4675v">
                                     <div class="css-1y0ox2o">
-                                        <span class="css-114dvlx">${formatNumber(player.wagered)}</span>
+                                        <span class="css-114dvlx">
+                                            <div class="price-wrapper">
+                                                ${prize}
+                                            </div>
+                                        </span>
                                     </div>
                                 </span>
                             </div>
-                            <span class="css-v4675v">
-                                <div class="css-1y0ox2o">
-                                    <span class="css-114dvlx">
-                                        <div data-v-1d580398="" class="price-wrapper">
-                                            ${prize}
+                        `;
+                    }
+
+                    // Add 1st place (always available if data.length > 0)
+                    if (player1) {
+                        const prize = fixedPrizes[1] ? `$ ${fixedPrizes[1]}` : '';
+                        top3Html += `
+                            <div class="css-oijls1">
+                                <img alt="${player1.username}'s avatar" srcset="/assets/rainbet-small.webp" src="/assets/rainbet-small.webp" width="96" height="96" decoding="async" data-nimg="1" class="css-1wgwpc8" loading="lazy" style="color: transparent;">
+                                <div class="css-hca0vm"><span class="css-15a1lq3">${player1.username}</span></div>
+                                <div class="css-7ahevu ejrykqo0"><span class="css-1vqddgv">Wagered: </span><span class="css-18icuxn">
+                                        <div class="css-1y0ox2o">
+                                            <span class="css-114dvlx">${formatNumber(player1.wagered)}</span>
                                         </div>
-                                    </span>
-                                </div>
-                            </span>
-                        </div>
-                    `;
-                    top3Leaderboard.innerHTML += topPlayerHtml;
+                                    </span></div><span class="css-v4675v">
+                                    <div class="css-1y0ox2o">
+                                        <span class="css-114dvlx">
+                                            <div class="price-wrapper">
+                                                ${prize}
+                                            </div>
+                                        </span>
+                                    </div>
+                                </span>
+                            </div>
+                        `;
+                    }
+
+                    // Add 3rd place (if available)
+                    if (player3) {
+                        const prize = fixedPrizes[3] ? `$ ${fixedPrizes[3]}` : '';
+                        top3Html += `
+                            <div class="css-jehefp">
+                                <img alt="${player3.username}'s avatar" srcset="/assets/rainbet-small.webp" src="/assets/rainbet-small.webp" width="96" height="96" decoding="async" data-nimg="1" class="css-1wgwpc8" loading="lazy" style="color: transparent;">
+                                <div class="css-hca0vm"><span class="css-15a1lq3">${player3.username}</span></div>
+                                <div class="css-7ahevu ejrykqo0"><span class="css-1vqddgv">Wagered: </span><span class="css-18icuxn">
+                                        <div class="css-1y0ox2o">
+                                            <span class="css-114dvlx">${formatNumber(player3.wagered)}</span>
+                                        </div>
+                                    </span></div><span class="css-v4675v">
+                                    <div class="css-1y0ox2o">
+                                        <span class="css-114dvlx">
+                                            <div class="price-wrapper">
+                                                ${prize}
+                                            </div>
+                                        </span>
+                                    </div>
+                                </span>
+                            </div>
+                        `;
+                    }
+                    top3Leaderboard.innerHTML = top3Html;
                 }
+
 
                 // Populate the rest of the leaderboard list (from rank 4 onwards)
                 for (let i = 3; i < data.length; i++) {
@@ -503,7 +554,7 @@
                         reward = `$ ${fixedPrizes[rank]}`;
                     } else {
                         // If no prize is defined for this rank, display 'N/A' or nothing
-                        reward = 'N/A';
+                        reward = 'N/A'; // Or an empty string '' if you prefer nothing
                     }
 
                     const listItemHtml = `
